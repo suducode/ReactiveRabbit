@@ -24,6 +24,9 @@ class ConsumerProxyBehaviorSpecification extends ProducerBaseBehaviorSpecificati
 
         then: "should not be allowed to process"
         producer.push(new HashMap()) == false
+
+        cleanup:
+        producer.close()
     }
 
     def "can process control ,control the demand ?"() {
@@ -32,96 +35,38 @@ class ConsumerProxyBehaviorSpecification extends ProducerBaseBehaviorSpecificati
         createFakeDemand()
 
         then: "should be allowed to process"
-        sourceProxy.canProcess() == true
+        producer.push(new HashMap()) == true
 
         when: "we control the demand"
-        sourceProxy.processControl(false)
+        consumerProxy.receive(0)
 
         then: "should not be allowed to process"
-        sourceProxy.canProcess() ==  false
+        producer.push(new HashMap()) ==  false
+
+        cleanup:
+        producer.close()
     }
 
-    def "check serialization batch completes if the time is elapsed"() {
+    def "check to make sure OnNext works as expected"() {
 
-        when : "we start the clock"
+        when : "create a record and push it to the proxy"
         def record = new HashMap<>()
         record.put("test", "test")
-        Message message = sourceProxy.getBatchedMessage(record)
+        consumerProxy.onNext(record)
 
-        then : "Batch not complete yet"
-        message == null
+        then : "check to make sure our counter goes up"
+        counter.count == 1
 
         when: "wait the default configured time of 5 seconds"
-        Thread.sleep(5000)
-        message = sourceProxy.getBatchedMessage(record)
-
-        then: "Batch complete"
-        message != null
-
-        cleanup:
-        sourceProxy.resetSerializationBatch()
-        sourceProxy.resetProcessedCount()
-    }
-
-
-    def "check serialization batch completes with the configured count"() {
-
-        when : "we start the batch"
-        def record = new HashMap<>()
-        record.put("test", "test")
-        Message message = sourceProxy.getBatchedMessage(record)
-
-        then : "Batch not complete yet"
-        message == null
-
-        when: "sending the rest to complete the batch "
-        4.times {
-            message = sourceProxy.getBatchedMessage(record)
-        }
-
-        then: "Batch complete"
-        message != null
-
-        cleanup:
-        sourceProxy.resetSerializationBatch()
-        sourceProxy.resetProcessedCount()
-    }
-
-    def "check sending message to broker"() {
-
-        when : "sending message to broker in a serialized batch"
-        sourceProxy.setSerializationCount(5)
-        sourceProxy.sendMessageToBroker(new Message(new byte[sourceProxy.getSerializationCount()],new MessageProperties()))
-
-        then : "counter should go up serialization batch size"
-        sourceProxy.getBatchProcessedCount() == 5
-
-        cleanup:
-        sourceProxy.resetSerializationBatch()
-        sourceProxy.resetProcessedCount()
-    }
-
-    def "check source proxy processes records correctly"() {
-
-        when : "records offered to be processed one less than publish batch size count"
-        def record = new HashMap<>()
-        record.put("test", "test")
         9.times {
-           sourceProxy.process(record)
+            consumerProxy.onNext(record)
         }
 
-        then : "counter should go up by serialization batch size"
-        sourceProxy.getBatchProcessedCount() == 5
-
-        when: "sending one more to complete the batch"
-        sourceProxy.process(record)
-
-        then : "counter should be reset"
-        sourceProxy.getBatchProcessedCount() == 0
+        then: "Batch should be complete and counter should be reset"
+        counter.count == 0
 
         cleanup:
-        sourceProxy.resetSerializationBatch()
-        sourceProxy.resetProcessedCount()
+        consumerProxy.cleanup()
     }
 
 }

@@ -32,7 +32,7 @@ producer.push(data) -- > This returns true or false depending on demand availabi
 
 # Benchmark Results 
 
-On my old mac with 54 mbit/s link 
+On my old 2010 MAC running locally : 
 
 Average records per second : 115 - 120 k
 

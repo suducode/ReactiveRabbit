@@ -61,13 +61,13 @@ public class ConsumerProxy implements Subscriber {
 
     @Override
     public void onError(Throwable throwable) {
-        LOG.error("Publishing ERROR: " + throwable.getMessage());
+        LOG.error("PUBLISHING ERROR: " + throwable.getMessage());
     }
 
     @Override
     public void onComplete() {
         cleanup();
-        LOG.info("Data Publishing Complete !!");
+        LOG.info("DATA PUBLISHING COMPLETE !!");
     }
 
     /**

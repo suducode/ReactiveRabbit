@@ -37,7 +37,8 @@ class ProducerBaseBehaviorSpecification extends Specification {
         producer = mock(ReactiveProducer.class)
         consumerProxy = mock(ConsumerProxy.class)
         mockProducerAccept()
-        mockProducerReceive()
+        mockConsumerProxyReceive()
+        mockConsumerProxyOnNext()
         mockProducerClose()
     }
 
@@ -73,17 +74,32 @@ class ProducerBaseBehaviorSpecification extends Specification {
         isAvailable = false
     }
 
-    def mockProducerReceive() {
+    def mockConsumerProxyReceive() {
         doAnswer(new Answer<Void>() {
             @Override
             public Void answer(final InvocationOnMock invocation) throws Throwable {
                 long request = (Long) invocation.arguments[0];
                 if (request > 0) {
                     isAvailable = true
+                } else {
+                    isAvailable = false
                 }
                 return null
             }
         }).when(consumerProxy).receive(anyLong())
+    }
+
+    def mockConsumerProxyOnNext() {
+        doAnswer(new Answer<Void>() {
+            @Override
+            public Void answer(final InvocationOnMock invocation) throws Throwable {
+                counter.inc()
+                if (counter.count == 10) {
+                    counter.dec(counter.count)
+                }
+                return null
+            }
+        }).when(consumerProxy).onNext(any())
     }
 
     def Properties defaultSetup() {

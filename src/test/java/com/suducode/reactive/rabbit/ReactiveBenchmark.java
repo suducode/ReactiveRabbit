@@ -3,6 +3,7 @@ package com.suducode.reactive.rabbit;
 import com.codahale.metrics.Meter;
 import com.suducode.reactive.rabbit.consumer.Consumer;
 import com.suducode.reactive.rabbit.consumer.ReactiveConsumer;
+import com.suducode.reactive.rabbit.producer.Producer;
 import com.suducode.reactive.rabbit.producer.ReactiveProducer;
 
 import java.util.HashMap;
@@ -12,6 +13,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 /**
+ * Library benchmark.
+ *
  * @author sudharshan krishnamurthy.
  */
 public class ReactiveBenchmark {
@@ -36,7 +39,7 @@ public class ReactiveBenchmark {
 
         @Override
         public void run() {
-            ReactiveProducer<Map<String, Object>> producer = new ReactiveProducer<>();
+            Producer<Map<String, Object>> producer = new ReactiveProducer<>();
             int i = 0;
             while (i < numberOfEvents) {
                 Map<String, Object> data = new HashMap();
