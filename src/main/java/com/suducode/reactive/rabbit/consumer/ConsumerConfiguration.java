@@ -30,7 +30,7 @@ public class ConsumerConfiguration extends ReactiveAmqpConfiguration {
         RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
         rabbitTemplate.afterPropertiesSet();
 
-        // create a proxy for the processor through which broker communication happens.
+        // create a proxy for the producer through which broker communication happens.
         producerProxy = new ProducerProxy(rabbitTemplate, configurationProperties);
 
         // Sets up the receiver for records that are published to the broker.

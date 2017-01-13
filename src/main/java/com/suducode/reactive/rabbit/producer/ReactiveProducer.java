@@ -1,15 +1,15 @@
 package com.suducode.reactive.rabbit.producer;
 
 import com.codahale.metrics.Counter;
+import com.google.common.annotations.VisibleForTesting;
 import com.suducode.reactive.rabbit.common.MetricsHelper;
 import com.suducode.reactive.rabbit.common.ReactiveAmqpProperties;
 import org.reactivestreams.Subscription;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
-
+import static com.google.common.base.Preconditions.checkArgument;
 import static com.suducode.reactive.rabbit.common.LogMessages.TEXT;
 
 /**
@@ -43,10 +43,26 @@ public class ReactiveProducer<T> implements Subscription, Producer<T> {
 
     private String producerId;
 
+    private int publishBatchSize;
+
+    private int amqpBatchSize;
+
+    private int serializationBatchSize;
+
     public ReactiveProducer(ReactiveAmqpProperties producerProperties) {
 
         this.producerProperties = producerProperties;
         producerId = PRODUCER_PREFIX + producerProperties.getId();
+
+        publishBatchSize = producerProperties.getPublishBatchSize();
+        amqpBatchSize = producerProperties.getAmqpBatchSize();
+        serializationBatchSize = producerProperties.getSerializationBatchSize();
+
+        // Check to see if can provide a predictable behaviour
+        checkArgument(publishBatchSize % (amqpBatchSize * serializationBatchSize) == 0,
+                "PublishBatchSize should be a multiple of AmqpBatchSize times SerializationBatchSize"
+                        + " for predictable performance behaviour.");
+
 
         // setup the amqp consumer infrastructure.
         producerConfiguration = new ProducerConfiguration(producerProperties);
@@ -93,6 +109,10 @@ public class ReactiveProducer<T> implements Subscription, Producer<T> {
         return success;
     }
 
+    @VisibleForTesting
+    protected long getProcessedCount() {
+        return processedCounter.getCount();
+    }
 
     @Override
     public void close() {

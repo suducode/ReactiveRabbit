@@ -229,7 +229,7 @@ public class ProducerProxy<T> implements MessageListener {
     }
 
     /**
-     * Source polls from the source queue to which the receiver adds the records.
+     * consumer polls from the consumer queue to which the receiver adds the records.
      *
      * @param timeOut  The bounded wait time.
      * @param timeUnit The unit of the time

@@ -27,7 +27,7 @@ public class ReactiveConsumer<T> implements Consumer<T> {
     private ReactiveAmqpProperties consumerProperties;
 
     /**
-     * A proxy for the AMQP processor.
+     * A proxy for the AMQP producer.
      */
     private ProducerProxy<T> producerProxy;
 
@@ -37,7 +37,7 @@ public class ReactiveConsumer<T> implements Consumer<T> {
     private AtomicLong currentEventCount = new AtomicLong(0);
 
     /**
-     * Agreed upon batch size between the amqp source and processor.
+     * Agreed upon batch size between the amqp producer and consumer.
      */
     private long publishBatchSize;
 
@@ -86,7 +86,7 @@ public class ReactiveConsumer<T> implements Consumer<T> {
     }
 
     /**
-     * Records are polled from the source.
+     * Records are polled from the consumer.
      *
      * @param timeout The bounded wait time.
      * @param unit    The unit of the time.

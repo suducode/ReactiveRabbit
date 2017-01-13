@@ -66,8 +66,6 @@ public class ConsumerProxy implements Subscriber {
 
     @Override
     public void onComplete() {
-        batchSerializedTemplate.stop();
-        producerSubscription.close();
         cleanup();
         LOG.info("Data Publishing Complete !!");
     }

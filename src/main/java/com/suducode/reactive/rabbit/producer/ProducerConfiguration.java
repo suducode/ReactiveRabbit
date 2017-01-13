@@ -31,7 +31,7 @@ public class ProducerConfiguration extends ReactiveAmqpConfiguration {
 
         BatchSerializedTemplate batch = batchingRabbitTemplate();
 
-        // create a proxy for the source through which broker communication happens.
+        // create a proxy for the consumer through which broker communication happens.
         consumerProxy = new ConsumerProxy(batch);
 
         // Tells which method would receive the demand.
