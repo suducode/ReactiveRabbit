@@ -8,8 +8,7 @@ Why ?
 RabbitMq is popular messaging bus and used pretty extensively in the industry. While great at what it does, it does not offer
 backpressure at a producer consumer level. It does provide backpressure using TCP (its underlying protocol) when the broker's memory fills up to
 certain level, slowing down all the producers associated to it. This means one fast producer / slow consumer combination can slow down all producers
-associated with the broker. By reactive capability of this library we provide backpresusre and as a nice side effect pretty good speed.
- The reason for speed comes from the rabbit queues being fairly empty for the most part of the data transfer.
+associated with the broker.But with this reactive library we provide backpresusre at a single producer/ consumer level and as a nice side effect, we get pretty good speed.The speed comes from the rabbit queues being fairly empty for the most part of the data transfer.
 
 How does it work ?
 
