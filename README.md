@@ -22,10 +22,6 @@ ReactiveProducer<Map<String, Object>> producer = new ReactiveProducer<>();
 
 Map<String, Object> data = new HashMap();
 
-data.put("id", i);
-
-data.put("payload", new byte[500]);
-
 producer.push(data) -- > This returns true or false depending on demand availability and the client will have to handle the false scenario.
 
 # Consumer: 
