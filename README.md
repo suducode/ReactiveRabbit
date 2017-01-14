@@ -30,5 +30,12 @@ producer.push(data) -- > This returns true or false depending on demand availabi
 
 `Map<String, Object> test = consumer.poll(5, TimeUnit.MILLISECONDS);`
 
+# Benchmark Results 
+
+On my local mac with 54 mbit/s link 
+
+Average records per second : 115 - 120 k
+
+record size : ~ 600 MB
 
 
