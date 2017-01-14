@@ -1,7 +1,9 @@
 # ReactiveRabbit
 Provides reactive capability to rabbit mq messaging
 
-# Basic Model: Consumer drives the demand for the producer.
+# Basic Model: 
+
+Consumer drives the demand for the producer.
 
 # Why ?
 
