@@ -18,17 +18,17 @@ Producer awaits demand from the consumer via reply queue.Upon receiving demand, 
 
 # Producer :
 
-ReactiveProducer<Map<String, Object>> producer = new ReactiveProducer<>();
+`Producer<Map<String, Object>> producer = new ReactiveProducer<>();`
 
-Map<String, Object> data = new HashMap();
+`Map<String, Object> data = new HashMap();`
 
 producer.push(data) -- > This returns true or false depending on demand availability and the client will have to handle the false scenario.
 
 # Consumer: 
 
-Consumer<Map<String, Object>> consumer = new ReactiveConsumer<>();
+`Consumer<Map<String, Object>> consumer = new ReactiveConsumer<>();`
 
-Map<String, Object> test = consumer.poll(5, TimeUnit.MILLISECONDS);
+`Map<String, Object> test = consumer.poll(5, TimeUnit.MILLISECONDS);`
 
 
 
